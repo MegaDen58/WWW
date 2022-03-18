@@ -15,7 +15,7 @@ public class Main {
         // Generation of key
 
         while (true){
-            System.out.print("Введите коэффициент P (правильное число): ");
+            System.out.print("Введите коэффициент P (простое число): ");
             p = in.nextInt();
             if(checkForCorrectness(p)){
                 break;
