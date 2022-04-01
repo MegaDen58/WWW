@@ -1,5 +1,5 @@
 package com.company;
-import javax.xml.validation.Schema;
+import java.math.BigInteger;
 import java.util.Scanner;
 
 
@@ -7,10 +7,14 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        int p = 0;
-        int g = 0;
-        int x = 0;
-        int keyOfSession = 0;
+        int p;
+        int g;
+        int x;
+        int keyOfSession;
+        BigInteger pf;
+        BigInteger gf;
+        BigInteger xf;
+        BigInteger keyOfSessionf;
 
         // Generation of key
 
@@ -18,6 +22,7 @@ public class Main {
             System.out.print("Введите коэффициент P (простое число): ");
             p = in.nextInt();
             if(checkForCorrectness(p)){
+                pf = BigInteger.valueOf(p);
                 break;
             }
         }
@@ -42,7 +47,7 @@ public class Main {
         // Key encryption
 
         System.out.print("Введите сообщение: ");
-        int M = in.nextInt();
+        BigInteger M = in.nextBigInteger();
 
         while(true) {
             System.out.print("Введите ключ сессии (1 < ключ < P - 1): ");
@@ -53,17 +58,24 @@ public class Main {
         }
 
 
+
+
         int y = (int)Math.pow(g, x) % p;
         System.out.printf("y = %d\n", y);
         int a = (int)Math.pow(g, keyOfSession) % p;
         System.out.printf("a = %d\n", a);
-        int b = ((int)Math.pow(y,keyOfSession) * M) % p;
+        BigInteger bPow = BigInteger.valueOf((int)Math.pow(y,keyOfSession));
+        BigInteger bMulty = M.multiply(bPow);
+        BigInteger b = bMulty.mod(pf);
         System.out.printf("b = %d\n", b);
         System.out.printf("Шифр (%d, %d)\n", a, b);
 
         // Decryption
 
-        System.out.print((b * (int) Math.pow(a, p - 1 - x)) % p);
+        BigInteger pow = BigInteger.valueOf(((int)Math.pow(a, p - 1 - x)));
+        BigInteger result = b.multiply(pow);
+        BigInteger result2 = result.mod(pf);
+        System.out.print(result2);
     }
 
     public static boolean checkForCorrectness(int p){
